@@ -163,7 +163,7 @@ do
 		echo "Building initial image..."
 		HOST_UID=$(id -u)
 		HOST_GID=1000
-		docker image build -t u22 --build-arg UID=$HOST_UID --build-arg GID=$HOST_GID -f docker/dockerfile .
+		docker image build -t lab --build-arg UID=$HOST_UID --build-arg GID=$HOST_GID -f docker/dockerfile .
 	     ;;
 
 	     start)

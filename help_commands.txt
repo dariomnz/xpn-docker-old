@@ -1,0 +1,12 @@
+# Stop, compile and start
+
+./lab.sh stop
+./lab.sh build
+./lab.sh start 2
+./lab.sh bash 1
+
+# Launch test with XPN_DEBUG
+
+source .profile
+export XPN_DEBUG=1
+./data/xpn-mpi-native-replication.sh

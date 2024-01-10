@@ -26,6 +26,6 @@ ssh-keygen -q -t rsa -N "" -f /home/lab/.ssh/id_rsa
 ssh-keygen -q -t dsa -N "" -f /home/lab/.ssh/id_dsa
 cat /home/lab/.ssh/id_dsa.pub >> /home/lab/.ssh/authorized_keys
 cat /home/lab/.ssh/id_rsa.pub >> /home/lab/.ssh/authorized_keys
-chown -R lab:lab /home/lab/
+# chown -R lab:lab /home/lab/
 chmod 700 /home/lab/.ssh
 

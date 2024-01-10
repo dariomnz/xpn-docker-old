@@ -16,7 +16,7 @@ wget wget https://dlcdn.apache.org/hadoop/common/hadoop-3.3.4/hadoop-3.3.4.tar.g
 tar zxf ${DESTINATION_PATH}/hadoop-334.tar.gz  -C ${DESTINATION_PATH}
 ln -s   ${DESTINATION_PATH}/hadoop-3.3.4          ${DESTINATION_PATH}/hadoop
 touch /home/lab/.profile
-chown -R lab:lab ${DESTINATION_PATH}
+# chown -R lab:lab ${DESTINATION_PATH}
 
 # 4) PATH
 echo "# Hadoop"                                          >> /home/lab/.profile
