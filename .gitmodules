@@ -1,0 +1,3 @@
+[submodule "xpn"]
+	path = xpn
+	url = git@github.com:dariomnz/xpn.git
