@@ -1,8 +1,7 @@
-# Stop, compile and start
+# Compile and start
 
-./lab.sh stop
 ./lab.sh build
-./lab.sh start 2
+./lab.sh start 3
 ./lab.sh bash 1
 
 # Launch test with XPN_DEBUG

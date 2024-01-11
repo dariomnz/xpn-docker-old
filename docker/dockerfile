@@ -35,6 +35,10 @@ COPY scripts/src-install/*.sh /tmp
  RUN  /tmp/mpich.sh   /home/lab/src/
 RUN chown -R lab:lab /home/lab
 
+# Compule xpn
+COPY xpn /home/lab/src/xpn
+RUN  /tmp/xpn.sh     /home/lab/src/
+
 # User initial home
 RUN mkdir -p  /home/lab/bin;  mkdir -p /home/lab/data
 ADD lab-home/bin   /home/lab/bin
@@ -43,8 +47,6 @@ ADD lab-home/data  /home/lab/data
 RUN chmod a+x /home/lab/bin/*.sh /home/lab/data/*.sh
 RUN chown -R lab:lab /home/lab/data
 
-COPY xpn /home/lab/src/xpn
-RUN  /tmp/xpn.sh     /home/lab/src/
 WORKDIR "/home/lab"
 
 # Container start-up
