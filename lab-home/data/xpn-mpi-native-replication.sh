@@ -14,7 +14,7 @@ mpiexec -np 1 \
         -hostfile        /work/machines_mpi \
         -genv XPN_DNS    /shared/dns.txt  \
         -genv XPN_CONF   /shared/config.xml \
-        /home/lab/src/xpn/test/performance/xpn/open-write-close /xpn/test 10
+        /home/lab/src/xpn/test/performance/xpn/rnd-write-read-cmp /xpn/test 10
 
 # 4) stop mpi_servers
 /home/lab/src/xpn/scripts/execute/xpn.sh -w /shared -d /work/machines_mpi stop
