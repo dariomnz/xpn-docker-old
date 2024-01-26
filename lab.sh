@@ -226,6 +226,21 @@ do
 		# Remove container cluster (single node) files...
 		lab_machines_remove
 	     ;;
+		 
+	     kill)
+		# Stopping containers
+		echo "Stopping containers..."
+		HOST_UID=$(id -u) HOST_GID=1000 docker-compose -f docker/dockercompose.yml kill
+		if [ $? -gt 0 ]; then
+		    echo ": The docker-compose command failed to stop containers."
+		    echo ": * Did you execute git clone https://github.com/acaldero/lab-docker.git?."
+		    echo ""
+		    exit
+		fi
+
+		# Remove container cluster (single node) files...
+		lab_machines_remove
+	     ;;
 
 	     status)
 		echo "Show status of current containers..."

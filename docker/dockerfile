@@ -35,6 +35,9 @@ COPY scripts/src-install/*.sh /tmp
  RUN  /tmp/mpich.sh   /home/lab/src/
 RUN chown -R lab:lab /home/lab
 
+#Install docker for test replication
+RUN apt-get install -y docker.io
+
 # Compule xpn
 COPY xpn /home/lab/src/xpn
 RUN  /tmp/xpn.sh     /home/lab/src/

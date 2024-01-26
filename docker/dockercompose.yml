@@ -24,6 +24,7 @@ services:
         source: /lib/modules
         target: /lib/modules
       - shared:/shared
+      - /var/run/docker.sock:/var/run/docker.sock
     networks:
       - b0
     privileged: true

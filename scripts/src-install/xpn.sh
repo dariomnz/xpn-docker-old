@@ -27,6 +27,9 @@ cd       ${DESTINATION_PATH}/xpn
 cd ${DESTINATION_PATH}/xpn/test/performance/xpn
 make -j $(nproc) all
 
+cd ${DESTINATION_PATH}/xpn/test/performance/xpn-fault-tolerant
+make -j $(nproc) all
+
 cd ${DESTINATION_PATH}/xpn/test/integrity/bypass_c
 make -j $(nproc) all
 
