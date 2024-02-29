@@ -18,7 +18,7 @@ run_test(){
     start=$(date +%s.%N)
 
 
-    sleep 1
+    sleep 3
     sudo chown lab:lab /shared
 
     # 1) build configuration file /shared/config.xml
@@ -27,6 +27,8 @@ run_test(){
     /home/lab/src/xpn/scripts/execute/xpn.sh -w /shared -l /work/machines_mpi -x /tmp/ -n $NL -p $replication_level start \
     &> /dev/null
 
+    export XPN_DEBUG=1; 
+    # export XPN_THREAD=1; 
     result1=$?
     # 3) start xpn client
     mpiexec -np 1 \
@@ -41,13 +43,13 @@ run_test(){
     # 4) stop mpi_servers
     /home/lab/src/xpn/scripts/execute/xpn.sh -w /shared -d /work/machines_mpi stop \
     &> /dev/null
-
     result3=$?
+    pkill mpiexec
 
 
     /home/lab/src/xpn/test/performance/xpn-fault-tolerant/revive-servers.sh \
     &> /dev/null
-
+    # netstat -tlnp
     end=$(date +%s.%N)
     runtime=$(python3 -c "print('%.2f' % (${end} - ${start}))")
     echo -n " Time: $runtime sec"
@@ -59,26 +61,26 @@ run_test(){
     fi
 }
 
-run_test write-server-read mark 0 1 1 0 
-run_test write-server-read mark 0 2.3 1.2 0
-run_test write-server-read mark 0 10 2.1 0
-run_test server-write-read mark 0 1 1 0 
-run_test server-write-read mark 0 2.3 1.2 0
-run_test server-write-read mark 0 10 2.1 0
+run_test write-server-read stop 0 1 1 0 
+run_test write-server-read stop 0 2.3 1.2 0
+run_test write-server-read stop 0 10 2.1 0
+run_test server-write-read stop 0 1 1 0 
+run_test server-write-read stop 0 2.3 1.2 0
+run_test server-write-read stop 0 10 2.1 0
 
-run_test write-server-read mark 1 1 1 1 
-run_test write-server-read mark 1 2.3 1.2 1
-run_test write-server-read mark 1 10 2.1 1
-run_test server-write-read mark 1 1 1 1
-run_test server-write-read mark 1 2.3 1.2 1
-run_test server-write-read mark 1 10 2.1 1
+run_test write-server-read stop 1 1 1 1 
+run_test write-server-read stop 1 2.3 1.2 1
+run_test write-server-read stop 1 10 2.1 1
+run_test server-write-read stop 1 1 1 1
+run_test server-write-read stop 1 2.3 1.2 1
+run_test server-write-read stop 1 10 2.1 1
 
-run_test write-server-read mark 2 1 1 2
-run_test write-server-read mark 2 2.3 1.2 2
-run_test write-server-read mark 2 10 2.1 2
-run_test server-write-read mark 2 1 1 2 
-run_test server-write-read mark 2 2.3 1.2 2
-run_test server-write-read mark 2 10 2.1 2
+run_test write-server-read stop 2 1 1 2
+run_test write-server-read stop 2 2.3 1.2 2
+run_test write-server-read stop 2 10 2.1 2
+run_test server-write-read stop 2 1 1 2 
+run_test server-write-read stop 2 2.3 1.2 2
+run_test server-write-read stop 2 10 2.1 2
 
 # run_test server-write-read stop 2 10 2 3
 

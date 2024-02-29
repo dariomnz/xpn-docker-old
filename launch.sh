@@ -42,7 +42,10 @@ do
         # Bash on container...
         echo "Executing /bin/bash on container $CO_ID..."
         CO_NAME=$(docker ps -f name=$DOCKER_PREFIX_NAME -q | head -$CO_ID | tail -1)
-        docker exec -it --user lab $CO_NAME bash -c "source .profile; export XPN_DEBUG=1; $1"
+        docker exec -it --user lab $CO_NAME bash -c \
+        "source .profile; 
+        $1" \
+        # &> launch.out 
     ;;
 
 	esac
