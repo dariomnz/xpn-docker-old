@@ -46,12 +46,6 @@ COPY ior /home/lab/src/ior
 RUN chown -R lab:lab /home/lab/src/ior
 RUN  /tmp/ior.sh -m /home/lab/bin/mpich/bin/mpicc -i /home/lab/src/ -s /home/lab/src/ior
 
-COPY scripts/src-install/test.sh /tmp
-RUN  chmod a+x /tmp/test.sh
-# COPY test /home/lab/src/test
-# RUN chown -R lab:lab /home/lab/src/test
-RUN  /tmp/test.sh -i /home/lab/src/
-
 # Compule xpn
 COPY scripts/src-install/xpn.sh /tmp
  RUN  chmod a+x /tmp/xpn.sh
