@@ -11,6 +11,7 @@ NL=$(cat /work/machines_mpi | wc -l)
 
 export XPN_DEBUG=1; 
 export XPN_THREAD=0; 
+export XPN_LOCALITY=1; 
 # 3) start xpn client
 mpiexec -np 1 \
         -hostfile        /work/machines_mpi \
