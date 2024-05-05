@@ -24,7 +24,16 @@ run_test(){
     # 1) build configuration file /shared/config.xml
     # 2) start mpi_servers in background
     NL=$(cat /work/machines_mpi | wc -l)
-    /home/lab/src/xpn/scripts/execute/xpn.sh -w /shared -l /work/machines_mpi -x /tmp/ -n $NL -p $replication_level start \
+    # Build hostlist
+    hostlist=""
+
+    while IFS= read -r line || [ -n "$line" ]; do
+        hostlist="$hostlist,$line"
+    done < "/work/machines_mpi"
+
+    hostlist="${hostlist:1}"
+    # /home/lab/src/xpn/scripts/execute/xpn.sh -w /shared -l /work/machines_mpi -x /tmp/ -n $NL -p $replication_level start \
+    /home/lab/src/xpn/admire/io-scheduler/expand.sh --hosts ${hostlist} --shareddir "/shared/" --replication_level ${replication_level} start \
     &> /dev/null
 
     export XPN_DEBUG=1; 
@@ -41,8 +50,9 @@ run_test(){
 
     result2=$?
     # 4) stop mpi_servers
-    /home/lab/src/xpn/scripts/execute/xpn.sh -w /shared -d /work/machines_mpi stop \
+    /home/lab/src/xpn/admire/io-scheduler/expand.sh --shareddir "/shared/" stop \
     &> /dev/null
+    # /home/lab/src/xpn/scripts/execute/xpn.sh -w /shared -d /work/machines_mpi stop \
     result3=$?
     pkill mpiexec
 

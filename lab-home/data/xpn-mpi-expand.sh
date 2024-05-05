@@ -5,7 +5,7 @@ sudo chown lab:lab /shared
 # 1) build configuration file /shared/config.xml
 # 2) start mpi_servers in background
 NL=$(cat /work/machines_mpi | wc -l)
-REPLICATION_LEVEL=1
+REPLICATION_LEVEL=0
 
 # Build hostlist
 hostlist=""
@@ -16,40 +16,88 @@ done < "/work/machines_mpi"
 
 hostlist="${hostlist:1}"
 
-hostlist_minus=$(echo "$hostlist" | rev | cut -d',' -f2- | rev)
+# hostlist_minus=$(echo "$hostlist" | rev | cut -d',' -f2- | rev)
+hostlist_minus=$(echo "$hostlist" | cut -d',' -f2-)
 timestamp=$(date +%s)
-
+file_size=100m
 # export XPN_DEBUG=1
 export XPN_DNS=/shared/dns.txt
 export XPN_CONF=/shared/config.xml
 sleep 2
-/home/lab/src/xpn/admire/io-scheduler/expand.sh --hosts ${hostlist_minus} --shareddir "/shared/" --replication_level ${REPLICATION_LEVEL} start 
+/home/lab/src/xpn/admire/io-scheduler/expand.sh --hosts ${hostlist} --shareddir "/shared/" --replication_level ${REPLICATION_LEVEL} start 
 cat /shared/dns.txt
 sleep 2
 
-mpiexec -l -np 1 \
+
+/home/lab/src/xpn/scripts/execute/xpn.sh -s /home/lab/data -x /tmp/expand/data -l /work/machines_mpi -n $NL -p $REPLICATION_LEVEL preload
+
+diff <(cat /home/lab/data/archivo.txt) <(mpiexec -np 1 -hostfile /work/machines_mpi /home/lab/src/xpn/src/utils/xpn-cat /xpn/archivo.txt)
+# export XPN_DEBUG=1
+mpiexec -l -np 3 \
         -hostfile        /work/machines_mpi \
         -genv XPN_DNS    /shared/dns.txt  \
         -genv XPN_CONF   /shared/config.xml \
         -genv LD_PRELOAD /home/lab/bin/xpn/lib64/xpn_bypass.so:$LD_PRELOAD \
-        /home/lab/src/ior/bin/ior -w -W -G ${timestamp} -o /tmp/expand/xpn/iortest1 -t 400k -b 400k -s 500 -i 1 -d 2 -k
+        /home/lab/src/ior/bin/ior -w -W -G ${timestamp} -o /tmp/expand/xpn/iortest1 -t ${file_size} -b ${file_size} -s 1 -i 1 -d 2 -k -F
 
 mpiexec -l -np $NL \
         -hostfile        /work/machines_mpi \
         -genv XPN_DNS    /shared/dns.txt  \
         -genv XPN_CONF   /shared/config.xml \
-        ls -alsh /tmp/expand/data
+        ls -als /tmp/expand/data
 
-/home/lab/src/xpn/admire/io-scheduler/expand.sh --hosts ${hostlist} --shareddir "/shared/" --replication_level ${REPLICATION_LEVEL} --verbose expand
+/home/lab/src/xpn/admire/io-scheduler/expand.sh --hosts ${hostlist_minus} --shareddir "/shared/" --replication_level ${REPLICATION_LEVEL} --verbose expand_v2
 sleep 2
 
+diff <(cat /home/lab/data/archivo.txt) <(mpiexec -np 1 -hostfile /work/machines_mpi /home/lab/src/xpn/src/utils/xpn-cat /xpn/archivo.txt)
+mpiexec -l -np $NL \
+        -hostfile        /work/machines_mpi \
+        -genv XPN_DNS    /shared/dns.txt  \
+        -genv XPN_CONF   /shared/config.xml \
+        ls -als /tmp/expand/data
 
-mpiexec -l -np 1 \
+mpiexec -l -np $NL \
+        -hostfile        /work/machines_mpi \
+        -genv XPN_DNS    /shared/dns.txt  \
+        -genv XPN_CONF   /shared/config.xml \
+        netstat -tlnp
+# export XPN_DEBUG=1
+mpiexec -l -np 3 \
         -hostfile        /work/machines_mpi \
         -genv XPN_DNS    /shared/dns.txt  \
         -genv XPN_CONF   /shared/config.xml \
         -genv LD_PRELOAD /home/lab/bin/xpn/lib64/xpn_bypass.so:$LD_PRELOAD \
-        /home/lab/src/ior/bin/ior -r -R -G ${timestamp} -o /tmp/expand/xpn/iortest1 -t 400k -b 400k -s 500 -i 1 -d 2 -k
+        /home/lab/src/ior/bin/ior -r -R -G ${timestamp} -o /tmp/expand/xpn/iortest1 -t ${file_size} -b ${file_size} -s 1 -i 1 -d 2 -k -F
+
+/home/lab/src/xpn/admire/io-scheduler/expand.sh --hosts ${hostlist} --shareddir "/shared/" --replication_level ${REPLICATION_LEVEL} --verbose expand_v2
+
+mpiexec -l -np $NL \
+        -hostfile        /work/machines_mpi \
+        -genv XPN_DNS    /shared/dns.txt  \
+        -genv XPN_CONF   /shared/config.xml \
+        ls -als /tmp/expand/data
+
+mpiexec -l -np 3 \
+        -hostfile        /work/machines_mpi \
+        -genv XPN_DNS    /shared/dns.txt  \
+        -genv XPN_CONF   /shared/config.xml \
+        -genv LD_PRELOAD /home/lab/bin/xpn/lib64/xpn_bypass.so:$LD_PRELOAD \
+        /home/lab/src/ior/bin/ior -r -R -G ${timestamp} -o /tmp/expand/xpn/iortest1 -t ${file_size} -b ${file_size} -s 1 -i 1 -d 2 -k -F
+
+/home/lab/src/xpn/admire/io-scheduler/expand.sh --hosts ${hostlist_minus} --shareddir "/shared/" --replication_level ${REPLICATION_LEVEL} --verbose expand_v2
+
+mpiexec -l -np $NL \
+        -hostfile        /work/machines_mpi \
+        -genv XPN_DNS    /shared/dns.txt  \
+        -genv XPN_CONF   /shared/config.xml \
+        ls -als /tmp/expand/data
+
+mpiexec -l -np 3 \
+        -hostfile        /work/machines_mpi \
+        -genv XPN_DNS    /shared/dns.txt  \
+        -genv XPN_CONF   /shared/config.xml \
+        -genv LD_PRELOAD /home/lab/bin/xpn/lib64/xpn_bypass.so:$LD_PRELOAD \
+        /home/lab/src/ior/bin/ior -r -R -G ${timestamp} -o /tmp/expand/xpn/iortest1 -t ${file_size} -b ${file_size} -s 1 -i 1 -d 2 -k -F
 
 /home/lab/src/xpn/admire/io-scheduler/expand.sh --shareddir "/shared/" stop
 
