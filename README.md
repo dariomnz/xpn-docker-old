@@ -2,11 +2,11 @@
 
 ## Contents
 
- * [Some use cases with lab-docker](https://github.com/acaldero/lab-docker/#some-use-cases-with-lab-docker)
- * [Using lab-docker](https://github.com/acaldero/lab-docker/#using-lab-docker)
+ * [Some use cases with xpn-docker](https://github.com/dariomnz/xpn-docker/#some-use-cases-with-xpn-docker)
+ * [Using xpn-docker](https://github.com/dariomnz/xpn-docker/#using-xpn-docker)
 
 
-## Some use cases with lab-docker
+## Some use cases with xpn-docker
 
 <html>
  <table>
@@ -172,4 +172,5 @@ exit
 * :technologist: Diego Camarmas Alonso (XPN)
 * :technologist: Elias del Pozo Puñal (XPN)
 * :technologist: Saúl Alonso Monsalve
+* :technologist: Dario Muñoz Muñoz (XPN)
 

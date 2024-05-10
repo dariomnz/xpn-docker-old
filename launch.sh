@@ -5,7 +5,7 @@
 # ./launch.sh launch 3 ./data/xpn-mpi-native-replication-tests.sh
 # 3 servers, file to exec in server 1 ./data/xpn-mpi-native-replication-tests.sh 
 
-DOCKER_PREFIX_NAME=docker
+DOCKER_PREFIX_NAME=xpn-docker
 mkdir -p export
 
 while (( "$#" ))
@@ -20,7 +20,7 @@ do
         sleep 2
         ./launch.sh exec 1 $2
         ./lab.sh kill
-        docker images --format '{{.ID}} {{.Repository}}:{{.Tag}}' | grep -v 'lab' | awk '{print $1}' | xargs docker rmi
+        docker images --format '{{.ID}} {{.Repository}}:{{.Tag}}' | grep 'xpn-docker'| grep -v 'base-xpn-docker' | awk '{print $1}' | xargs docker rmi
     ;;
         exec)
         shift

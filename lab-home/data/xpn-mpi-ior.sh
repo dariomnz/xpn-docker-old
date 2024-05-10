@@ -16,6 +16,7 @@ export XPN_DNS=/shared/dns.txt
 # export XPN_DEBUG=1
 export XPN_CONF=/shared/config.xml
 /home/lab/src/xpn/scripts/execute/xpn.sh -e $SERVER_TYPE -w /shared -l /work/machines_mpi -x /tmp -n $NL -v start
+sleep 2
 export XPN_LOCALITY=1
 # export XPN_THREAD=1
 # 3) start xpn client
@@ -35,18 +36,9 @@ mpiexec -l -np $NL \
         -genv LD_PRELOAD /home/lab/bin/xpn/lib64/xpn_bypass.so:$LD_PRELOAD \
         /home/lab/src/ior/bin/mdtest -d /tmp/expand/xpn -I 5 -z 1 -b 2 -u -e 100k -w 200k
 
-# export XPN_DEBUG=1
-# mpiexec -l -np $NL \
-#         -hostfile        /work/machines_mpi \
-#         -genv XPN_DNS    /shared/dns.txt  \
-#         -genv XPN_CONF   /shared/config.xml \
-#         -genv LD_PRELOAD /home/lab/bin/xpn/lib64/xpn_bypass.so:$LD_PRELOAD \
-#         /home/lab/src/ior/bin/md-workbench -o=/tmp/expand/xpn/out --verify-read -P=10 -D=5 -I=3 -S=3901
-
-ls -rlash /tmp
-netstat -tlnp
+# ls -rlash /tmp
+# netstat -tlnp
 # 4) stop mpi_servers
-ls -lash /home/lab/src/xpn/src/xpn_server
 /home/lab/src/xpn/scripts/execute/xpn.sh -e $SERVER_TYPE -w /shared -d /work/machines_mpi stop
 sleep 5
 netstat -tlnp

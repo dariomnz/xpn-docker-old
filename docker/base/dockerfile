@@ -1,0 +1,36 @@
+ARG UBUNTU_VERSION=22.04
+FROM ubuntu:${UBUNTU_VERSION} AS base
+
+ARG UID
+ARG GID
+
+ENV DEBIAN_FRONTEND=noninteractive 
+
+
+# A) Install essential software
+COPY scripts/pkg-install/*.sh /tmp
+ RUN  chmod a+x /tmp/*.sh
+ RUN  /tmp/essential-util.sh
+ RUN  /tmp/essential-net.sh
+ RUN  /tmp/essential-build.sh
+ RUN  /tmp/essential-python.sh
+
+# B) Setup lab user
+RUN addgroup --gid $GID lab && \
+    adduser  --uid $UID --gid $GID --disabled-password --gecos "" lab && \
+    echo 'lab ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers
+RUN echo 'lab:lab' | chpasswd
+
+# C) Install SSH (from package)
+COPY scripts/pkg-install/*.sh /tmp
+ RUN  chmod a+x /tmp/*.sh
+ RUN  /tmp/ssh.sh
+
+#Install docker for test replication
+RUN apt-get install -y docker.io
+
+# D) Install Spark and XPN (from source)
+COPY scripts/src-install/mpich.sh /tmp
+ RUN  chmod a+x /tmp/mpich.sh
+ RUN  /tmp/mpich.sh   /home/lab/src/
+RUN chown -R lab:lab /home/lab

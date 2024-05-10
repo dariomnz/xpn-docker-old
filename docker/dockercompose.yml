@@ -12,7 +12,7 @@ services:
       args:
         UID: ${HOST_UID}
         GID: ${HOST_GID}
-    image: lab
+    image: xpn-docker
     volumes:
       - type: bind
         source: ..

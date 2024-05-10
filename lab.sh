@@ -2,7 +2,7 @@
 #set -x
 
 #
-#  Copyright 2019-2023 Saul Alonso Monsalve, Felix Garcia Carballeira, Jose Rivadeneira Lopez-Bravo, Alejandro Calderon Mateos,
+#  Copyright 2019-2023 Saul Alonso Monsalve, Felix Garcia Carballeira, Jose Rivadeneira Lopez-Bravo, Alejandro Calderon Mateos, Dario Muñoz Muñoz
 #
 #  This file is part of LAB proyect.
 #
@@ -24,7 +24,7 @@
 lab_welcome ()
 {
 	echo ""
-	echo "  Lab-Docker with ubuntu 22.04 (v2.2) "
+	echo "  Xpn-Docker with ubuntu 22.04 (v2.2) "
 	echo " -------------------------------------"
 	echo ""
 }
@@ -50,7 +50,7 @@ lab_help_b ()
 	echo "    3) Lastly, please stop the work session with:"
 	echo "          $0 stop"
 	echo ""
-	echo "  : Available option to uninstall lab-docker (remove images + containers):"
+	echo "  : Available option to uninstall xpn-docker (remove images + containers):"
 	echo "          $0 cleanup"
 	echo ""
 }
@@ -62,7 +62,7 @@ lab_help_c ()
 	echo "  :: First time + each time docker/dockerfile is updated, please execute:"
 	echo "        $0 build"
 	echo ""
-	echo "  :: Working with lab-docker:"
+	echo "  :: Working with xpn-docker:"
 	echo "     1) Starting the containers:"
 	echo "        $0 start <number of containers>"
 	echo ""
@@ -76,7 +76,7 @@ lab_help_c ()
 	echo "     3) Stopping the containers:"
 	echo "        $0 stop"
 	echo ""
-	echo "  :: Available option to uninstall lab-docker (remove images + containers):"
+	echo "  :: Available option to uninstall xpn-docker (remove images + containers):"
 	echo "        $0 cleanup"
 	echo ""
 }
@@ -143,7 +143,7 @@ fi
 # for each argument, try to execute it
 #
 
-DOCKER_PREFIX_NAME=docker
+DOCKER_PREFIX_NAME=xpn-docker
 mkdir -p export
 
 while (( "$#" ))
@@ -154,7 +154,7 @@ do
 		# Check params
 		if [ ! -f docker/dockerfile ]; then
 		    echo ": The docker/dockerfile file is not found."
-		    echo ": * Did you execute git clone https://github.com/acaldero/lab-docker.git?."
+		    echo ": * Did you execute git clone https://github.com/dariomnz/xpn-docker.git?."
 		    echo ""
 		    exit
 		fi
@@ -163,7 +163,8 @@ do
 		echo "Building initial image..."
 		HOST_UID=$(id -u)
 		HOST_GID=1000
-		docker image build -t lab --build-arg UID=$HOST_UID --build-arg GID=$HOST_GID -f docker/dockerfile .
+		# docker image build -t dariomnz/base-xpn-docker --build-arg UID=$HOST_UID --build-arg GID=$HOST_GID -f docker/base/dockerfile .
+		docker image build -t xpn-docker --build-arg UID=$HOST_UID --build-arg GID=$HOST_GID -f docker/dockerfile .
 	     ;;
 
 	     start)
@@ -171,10 +172,10 @@ do
 
 		# Start container cluster (single node)
 		echo "Building containers..."
-		HOST_UID=$(id -u) HOST_GID=1000 docker-compose -f docker/dockercompose.yml up -d --scale node=$1
+		HOST_UID=$(id -u) HOST_GID=1000 docker-compose -f docker/dockercompose.yml -p $DOCKER_PREFIX_NAME up -d --scale node=$1
 		if [ $? -gt 0 ]; then
 		    echo ": The docker-compose command failed to spin up containers."
-		    echo ": * Did you execute git clone https://github.com/acaldero/lab-docker.git?."
+		    echo ": * Did you execute git clone https://github.com/dariomnz/xpn-docker.git?."
 		    echo ""
 		    exit
 		fi
@@ -183,7 +184,7 @@ do
 		lab_machines_create
 
 		# Update /etc/hosts on each node
-		CONTAINER_ID_LIST=$(docker ps -f name=docker -q)
+		CONTAINER_ID_LIST=$(docker ps -f name=xpn-docker -q)
 		for C in $CONTAINER_ID_LIST; do
 		    docker container exec -it $C /work/lab-home/bin/hosts_update.sh
 		done
@@ -207,18 +208,19 @@ do
                 fi
 
 		# Bash on container...
-		echo "Executing /bin/bash on container $CO_ID..."
+		echo "Executing /bin/bash on containeradf $CO_ID..."
 		CO_NAME=$(docker ps -f name=$DOCKER_PREFIX_NAME -q | head -$CO_ID | tail -1)
+		echo "Coname $CO_NAME"
 		docker exec -it --user lab $CO_NAME /bin/bash
 	     ;;
 
 	     stop)
 		# Stopping containers
 		echo "Stopping containers..."
-		HOST_UID=$(id -u) HOST_GID=1000 docker-compose -f docker/dockercompose.yml down
+		HOST_UID=$(id -u) HOST_GID=1000 docker-compose -f docker/dockercompose.yml -p $DOCKER_PREFIX_NAME down
 		if [ $? -gt 0 ]; then
 		    echo ": The docker-compose command failed to stop containers."
-		    echo ": * Did you execute git clone https://github.com/acaldero/lab-docker.git?."
+		    echo ": * Did you execute git clone https://github.com/dariomnz/xpn-docker.git?."
 		    echo ""
 		    exit
 		fi
@@ -230,10 +232,10 @@ do
 	     kill)
 		# Stopping containers
 		echo "Stopping containers..."
-		HOST_UID=$(id -u) HOST_GID=1000 docker-compose -f docker/dockercompose.yml kill
+		HOST_UID=$(id -u) HOST_GID=1000 docker-compose -f docker/dockercompose.yml -p $DOCKER_PREFIX_NAME kill
 		if [ $? -gt 0 ]; then
 		    echo ": The docker-compose command failed to stop containers."
-		    echo ": * Did you execute git clone https://github.com/acaldero/lab-docker.git?."
+		    echo ": * Did you execute git clone https://github.com/dariomnz/xpn-docker.git?."
 		    echo ""
 		    exit
 		fi
