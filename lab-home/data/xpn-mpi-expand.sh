@@ -23,6 +23,7 @@ file_size=100m
 # export XPN_DEBUG=1
 export XPN_DNS=/shared/dns.txt
 export XPN_CONF=/shared/config.xml
+# export XPN_LOCALITY=1
 sleep 2
 /home/lab/src/xpn/admire/io-scheduler/expand.sh --hosts ${hostlist} --shareddir "/shared/" --replication_level ${REPLICATION_LEVEL} start 
 cat /shared/dns.txt
@@ -31,7 +32,7 @@ sleep 2
 
 /home/lab/src/xpn/scripts/execute/xpn.sh -s /home/lab/data -x /tmp/expand/data -l /work/machines_mpi -n $NL -p $REPLICATION_LEVEL preload
 
-diff <(cat /home/lab/data/archivo.txt) <(mpiexec -np 1 -hostfile /work/machines_mpi /home/lab/src/xpn/src/utils/xpn-cat /xpn/archivo.txt)
+sleep 5
 # export XPN_DEBUG=1
 mpiexec -l -np 3 \
         -hostfile        /work/machines_mpi \
@@ -49,7 +50,6 @@ mpiexec -l -np $NL \
 /home/lab/src/xpn/admire/io-scheduler/expand.sh --hosts ${hostlist_minus} --shareddir "/shared/" --replication_level ${REPLICATION_LEVEL} --verbose expand_v2
 sleep 2
 
-diff <(cat /home/lab/data/archivo.txt) <(mpiexec -np 1 -hostfile /work/machines_mpi /home/lab/src/xpn/src/utils/xpn-cat /xpn/archivo.txt)
 mpiexec -l -np $NL \
         -hostfile        /work/machines_mpi \
         -genv XPN_DNS    /shared/dns.txt  \
