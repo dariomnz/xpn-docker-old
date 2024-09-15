@@ -88,10 +88,11 @@ cd "$SRC_PATH"
 export MPICC=$MPICC_PATH
 export CC=$MPICC_PATH
 export PATH=$(dirname $MPICC_PATH):$PATH
-./bootstrap
-./configure --prefix="$INSTALL_PATH/ior"
-# ./configure CFLAGS="-pg -fsanitize=undefined " LDFLAGS="-pg -fsanitize=undefined " --prefix="$INSTALL_PATH/ior"
-make clean
-make -j 8
-make install
+./prepare.sh
+
+# ./bootstrap
+# ./configure CFLAGS="-pg" LDFLAGS="-pg" --prefix="$INSTALL_PATH/ior"
+# make clean
+# make -j 8
+# make install
 popd

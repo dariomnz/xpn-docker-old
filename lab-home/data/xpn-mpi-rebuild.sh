@@ -4,7 +4,7 @@ set -x
 
 sudo chown lab:lab /shared
 sleep 2
-REPLICATION_LEVEL=2
+REPLICATION_LEVEL=0
 # 1) build configuration file /shared/config.xml
 # 2) start mpi_servers in background
 NL=$(cat /work/machines_mpi | wc -l)
@@ -24,9 +24,11 @@ mkdir /shared/flush
 /home/lab/src/xpn/scripts/execute/xpn.sh -x /tmp/ -t /shared/flush -l /work/machines_mpi -n $NL -p $REPLICATION_LEVEL flush
 # export XPN_SCK_PORT=5555 
 export XPN_DNS=/shared/dns.txt 
-# export XPN_DEBUG=1
 export XPN_CONF=/shared/config.xml
 /home/lab/src/xpn/scripts/execute/xpn.sh -e mpi -w /shared -l /work/machines_mpi -x /tmp/ -n $NL -p $REPLICATION_LEVEL -v start
+
+sleep 1
+# export XPN_DEBUG=1
 export XPN_LOCALITY=1
 
 ls -rlash /tmp

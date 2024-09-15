@@ -1,0 +1,19 @@
+{
+    "configurations": [
+        {
+            "name": "Linux",
+            "includePath": [
+                "${workspaceFolder}/**",
+                "${workspaceFolder}/xpn/include",
+                "${workspaceFolder}/xpn/include/xpn_client",
+                "/usr/include/x86_64-linux-gnu/mpich",
+                "/usr/include/**",
+                "${workspaceFolder}/xpn/include/xpn_client/xpn/xpn_simple",
+                "/home/lab/bin/libfabric/include"
+            ],
+            "defines": [],
+            "compilerPath": "/usr/bin/gcc"
+        }
+    ],
+    "version": 4
+}

@@ -1,10 +1,30 @@
 FROM dariomnz/base-xpn-docker
 
+# COPY scripts/src-install/openmpi.sh /tmp
+#  RUN  chmod a+x /tmp/openmpi.sh
+#  RUN  /tmp/openmpi.sh   /home/lab/src/
+# RUN chown -R lab:lab /home/lab
+
+
+COPY scripts/src-install/libfabric.sh /tmp
+ RUN  chmod a+x /tmp/libfabric.sh
+ RUN  /tmp/libfabric.sh   /home/lab/src/
+RUN chown -R lab:lab /home/lab
+
+# COPY scripts/pkg-install/perf.sh /tmp
+# RUN  /tmp/perf.sh
+
 COPY scripts/src-install/ior.sh /tmp
  RUN  chmod a+x /tmp/ior.sh
 COPY ior /home/lab/src/ior
-RUN chown -R lab:lab /home/lab/src/ior
 RUN  /tmp/ior.sh -m /home/lab/bin/mpich/bin/mpicc -i /home/lab/src/ -s /home/lab/src/ior
+RUN chown -R lab:lab /home/lab/src/ior
+
+# COPY scripts/src-install/io500.sh /tmp
+#  RUN  chmod a+x /tmp/io500.sh
+# COPY io500 /home/lab/src/io500
+# RUN  /tmp/io500.sh -m /home/lab/bin/mpich/bin/mpicc -i /home/lab/src/ -s /home/lab/src/io500
+# RUN chown -R lab:lab /home/lab/src/io500
 
 # Compule xpn
 COPY scripts/src-install/xpn.sh /tmp

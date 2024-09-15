@@ -9,6 +9,7 @@ sudo chown lab:lab /shared
 NL=$(cat /work/machines_mpi | wc -l)
 /home/lab/src/xpn/scripts/execute/xpn.sh -w /shared -l /work/machines_mpi -x /tmp/ -n $NL -p 2 start
 
+sleep 1
 export XPN_DEBUG=1; 
 export XPN_THREAD=0; 
 export XPN_LOCALITY=1; 

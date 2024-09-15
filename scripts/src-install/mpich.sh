@@ -13,9 +13,9 @@ DESTINATION_PATH=$1
 # 3) Download MPICH
 mkdir -p ${DESTINATION_PATH}
 cd       ${DESTINATION_PATH}
-wget https://www.mpich.org/static/downloads/4.1.1/mpich-4.1.1.tar.gz
-tar zxf mpich-4.1.1.tar.gz
-ln   -s mpich-4.1.1  mpich
+wget https://www.mpich.org/static/downloads/4.2.1/mpich-4.2.1.tar.gz
+tar zxf mpich-4.2.1.tar.gz
+ln   -s mpich-4.2.1  mpich
 
 # 4) Install MPICH (from source code)
 mkdir -p /home/lab/bin
